@@ -13,10 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $connection = new Connection();
         $db = $connection->selectDatabase();
 
-        include "users.php";
+        include "Users.php";  // Utilisez Users au lieu de User
 
         // Call the static selectUserById method and store the result in $row
-        $row = User::selectUserById($db, $id);
+        $row = Users::selectUserById($db, $id);  // Utilisez Users::selectUserById
         if ($row) {
             // Pre-fill form fields with user data
             $emailvalue = $row['email'];
@@ -40,13 +40,14 @@ if (isset($_POST["submit"])) {
         $connection = new Connection();
         $db = $connection->selectDatabase();
 
-        include "users.php";
+        include "Users.php";  // Utilisez Users au lieu de User
 
-        // Create a new instance of User
-        $user = new User($id, $emailvalue, $passwordvalue);
+        // Create a new instance of Users (not User)
+        $user = new Users($emailvalue, $passwordvalue);  // Utilisez Users et non User
 
         // Call the static updateUser method and pass the $user instance
-        if (User::updateUser($db, $user)) {
+        if (Users::updateUser($db, $id, $emailvalue, $passwordvalue)) { 
+             header("location:read.php"); // Utilisez Users::updateUser
             $successmsg = "User updated successfully!";
         } else {
             $errormsg = "Failed to update the user.";
@@ -54,9 +55,9 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +65,6 @@ if (isset($_POST["submit"])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-
 <body>
     <div class="container my-5">
         <h2>Edit User</h2>
@@ -94,5 +94,3 @@ if (isset($_POST["submit"])) {
     </div>
 </body>
 </html>
-
-

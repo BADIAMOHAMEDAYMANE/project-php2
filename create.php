@@ -25,23 +25,27 @@ if (isset($_POST['submit'])) {
     } else {
         // Créer une connexion à la base de données
         $conn = new Connection();
-        $dbConn = $conn->selectDatabase();
 
-        if (!$dbConn) {
-            $messages[] = "La connexion à la base de données a échoué.";
-        } else {
+        try {
+            // Sélectionner la base de données
+            $conn->selectDatabase();
+
             // Créer un nouvel utilisateur
             $newUsers = new Users($emailvalue, $passwordvalue);
 
             // Insérer l'utilisateur dans la base de données
-            $insertResult = $newUsers->insertUsers($dbConn);
+            $insertResult = $newUsers->insertUser($conn->conn); // Utiliser l'objet connexion
 
             // Vérifier si l'insertion a réussi
             if ($insertResult) {
-                $successmsg = "Utilisateur enregistré avec succès.";
+                // Rediriger vers la page read.php après succès
+                header("Location: read.php");
+                exit(); // Arrêter l'exécution après redirection
             } else {
-                $messages[] = Users::$emailerrormsg; // Message d'erreur depuis la classe Users
+                $messages[] = Users::$errorMessage; // Message d'erreur depuis la classe Users
             }
+        } catch (Exception $e) {
+            $messages[] = "Erreur : " . $e->getMessage(); // Afficher l'erreur si la connexion échoue
         }
     }
 }
@@ -90,7 +94,7 @@ if (isset($_POST['submit'])) {
                     <button name="submit" type="submit" class="btn btn-primary">S'inscrire</button>
                 </div>
                 <div class="col-sm-3 d-grid">
-                    <a class="btn btn-outline-primary" href="login.php">Se connecter</a>
+                    <a class="btn btn-outline-primary" href="signin.php">Se connecter</a>
                 </div>
             </div>
 

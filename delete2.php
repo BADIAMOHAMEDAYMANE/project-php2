@@ -1,25 +1,25 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    // Retrieve 'id' from the GET request
+    // Récupérer 'id' depuis la requête GET
     $id = $_GET['id'];
 
-    // Include the database connection file
+    // Inclure le fichier de connexion à la base de données
     include ("Connection2.php");
 
-    // Create an instance of the Connection class
+    // Créer une instance de la classe Connection
     $connection = new Connection();
 
-    // Select the database
+    // Sélectionner la base de données
     $db = $connection->selectDatabase();
 
-    // Include the user file
-    include 'user.php';
+    // Inclure le fichier contenant la classe Users
+    include 'Users.php';  // Assurez-vous que le fichier Users.php existe
 
-    // Call the static deleteUser method to delete the user
-    if (User::deleteUser($db, $id)) {
-        echo "User with ID $id has been deleted successfully.";
+    // Appeler la méthode statique deleteUser pour supprimer l'utilisateur
+    if (Users::deleteUser($db, $id)) {  // Utilisez "Users" au lieu de "User"
+        echo "L'utilisateur avec l'ID $id a été supprimé avec succès.";
     } else {
-        echo "Failed to delete the user with ID $id.";
+        echo "Échec de la suppression de l'utilisateur avec l'ID $id.";
     }
 }
 ?>

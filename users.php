@@ -1,24 +1,46 @@
 <?php
 class Users {
-    private $emailvalue;
-    private $passwordvalue;
-    private $hashedpassword;
-    public static $emailerrormsg = "";
-    public static $passworderrormsg = "";
+    private $email;
+    private $password;
+    private $hashedPassword;
+    public static $errorMessage = "";
 
     // Constructeur
-    public function __construct($emailvalue, $passwordvalue) {
-        $this->emailvalue = $emailvalue;
-        $this->passwordvalue = $passwordvalue;
+    public function __construct($email, $password) {
+        $this->email = $email;
+        $this->password = $password;
 
         // Hachage du mot de passe
-        $this->hashedpassword = password_hash($passwordvalue, PASSWORD_DEFAULT);
+        $this->hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     }
 
-    // Méthode d'insertion d'un utilisateur
-    public function insertUsers($conn) {
+    // Getters
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function getPassword() {
+        return $this->password;
+    }
+
+    public function getHashedPassword() {
+        return $this->hashedPassword;
+    }
+
+    // Setters (si besoin de mise à jour)
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    public function setPassword($password) {
+        $this->password = $password;
+        $this->hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    // Méthode pour insérer un utilisateur
+    public function insertUser($conn) {
         if (!$conn) {
-            self::$emailerrormsg = "Database connection is null";
+            self::$errorMessage = "La connexion à la base de données est invalide.";
             return false;
         }
 
@@ -26,27 +48,28 @@ class Users {
         $stmt = $conn->prepare($sql);
 
         if ($stmt) {
-            $stmt->bind_param("ss", $this->emailvalue, $this->hashedpassword);
+            $stmt->bind_param("ss", $this->email, $this->hashedPassword);
             if ($stmt->execute()) {
                 $stmt->close();
                 return true;
-            } 
-            self::$emailerrormsg = "Error: " . $stmt->error;
+            } else {
+                self::$errorMessage = "Erreur lors de l'insertion : " . $stmt->error;
+            }
             $stmt->close();
-            return false;
+        } else {
+            self::$errorMessage = "Erreur lors de la préparation de la requête : " . $conn->error;
         }
-        
-        self::$emailerrormsg = "Error preparing statement: " . $conn->error;
+
         return false;
     }
 
     // Méthode pour récupérer tous les utilisateurs
     public static function selectAllUsers($conn) {
         if (!$conn) {
-            self::$emailerrormsg = "Database connection is null";
+            self::$errorMessage = "La connexion à la base de données est invalide.";
             return [];
         }
-        
+
         $data = [];
         $sql = "SELECT * FROM users";
 
@@ -58,40 +81,41 @@ class Users {
             }
             $stmt->close();
         } else {
-            self::$emailerrormsg = "Error preparing statement: " . $conn->error;
+            self::$errorMessage = "Erreur lors de la préparation de la requête : " . $conn->error;
         }
+
         return $data;
     }
 
-    // Méthode pour sélectionner un utilisateur par ID
+    // Méthode pour récupérer un utilisateur par ID
     public static function selectUserById($conn, $id) {
         if (!$conn) {
-            self::$emailerrormsg = "Database connection is null";
+            self::$errorMessage = "La connexion à la base de données est invalide.";
             return null;
         }
 
         $sql = "SELECT * FROM users WHERE id = ?";
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("i", $id);
-            if ($stmt->execute()) {
-                $result = $stmt->get_result();
-                if ($result->num_rows > 0) {
-                    $data = $result->fetch_assoc();
-                    $stmt->close();
-                    return $data;
-                }
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                $data = $result->fetch_assoc();
+                $stmt->close();
+                return $data;
             }
             $stmt->close();
         } else {
-            self::$emailerrormsg = "Error preparing statement: " . $conn->error;
+            self::$errorMessage = "Erreur lors de la préparation de la requête : " . $conn->error;
         }
+
         return null;
     }
 
     // Méthode pour mettre à jour un utilisateur
     public static function updateUser($conn, $id, $email, $password) {
         if (!$conn) {
-            self::$emailerrormsg = "Database connection is null";
+            self::$errorMessage = "La connexion à la base de données est invalide.";
             return false;
         }
 
@@ -103,15 +127,16 @@ class Users {
             $stmt->close();
             return $success;
         } else {
-            self::$emailerrormsg = "Error preparing statement: " . $conn->error;
+            self::$errorMessage = "Erreur lors de la préparation de la requête : " . $conn->error;
         }
+
         return false;
     }
 
     // Méthode pour supprimer un utilisateur
     public static function deleteUser($conn, $id) {
         if (!$conn) {
-            self::$emailerrormsg = "Database connection is null";
+            self::$errorMessage = "La connexion à la base de données est invalide.";
             return false;
         }
 
@@ -122,10 +147,10 @@ class Users {
             $stmt->close();
             return $success;
         } else {
-            self::$emailerrormsg = "Error preparing statement: " . $conn->error;
+            self::$errorMessage = "Erreur lors de la préparation de la requête : " . $conn->error;
         }
+
         return false;
     }
 }
 ?>
-

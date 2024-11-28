@@ -1,27 +1,25 @@
 <?php
 include("Connection2.php");
 
-// Créer une nouvelle instance de la classe Connection
-$db = new Connection();
+try {
+    // Instancier la connexion
+    $dbConnection = new Connection();
 
-// Créer la base de données
-$db->createDatabase();
+    // Sélectionner la base de données
+    $conn = $dbConnection->selectDatabase();
 
-// Sélectionner la base de données
-$db->selectDatabase();
+    // Créer une table si nécessaire
+    $createTableQuery = "
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )";
+    $dbConnection->createTable($createTableQuery);
 
-// Définir la requête SQL pour créer la table "users"
-$query = " 
-    CREATE TABLE IF NOT EXISTS users (
-        id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        email VARCHAR(30) UNIQUE,
-        password VARCHAR(100)
-    )
-";
-
-// Créer la table
-$db->createTable($query);
-
-// Fermer la connexion
-$db->closeConnection();
+    echo "La base de données et la table sont prêtes.<br>";
+} catch (Exception $e) {
+    echo "Erreur : " . $e->getMessage();
+}
 ?>
