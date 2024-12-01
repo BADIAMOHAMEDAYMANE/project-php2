@@ -16,12 +16,18 @@
       <label for="username">Email:</label>
       <input type="email" id="username" name="email" placeholder="Enter your email">
       <span style='color:red' class="span1"><?php echo $emailerrormsg ?></span>
+      
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password" >
+      <input type="password" id="password" name="password" placeholder="Enter your password">
       <span style='color:red' class="span1"><?php echo $passworderrormsg ?></span>
+      
       <label for="confirm-password">Confirm Password:</label>
       <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password">
       <button type="submit" name="submit">Sign Up</button>
+      <p>
+      Do you already have an account? 
+      <a href="signin.php">Sign In</a>
+    </p>
     </form>
   </div>
 </body>

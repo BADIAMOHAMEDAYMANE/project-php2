@@ -1,0 +1,74 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  background-image: url("https://www.canr.msu.edu/contentAsset/image/613ecf12-91f1-4292-8ec2-d1feb5547a9d/fileAsset/filter/Resize,Jpeg/resize_w/750/jpeg_q/80");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+h1 {
+  color: white;
+}
+#login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-left: 10px;
+  box-shadow: 2px 2px 2px 2px #e3d8d8;
+  width: max-content;
+  padding: 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+}
+
+#login-form label {
+  font-weight: bold;
+  color: white;
+}
+
+#login-form input {
+  height: 40px;
+  width: 200px;
+  border-radius: 10px;
+  border: 1px solid black;
+  padding: 5px;
+  font-family: inherit;
+}
+
+#login-form button {
+  border: none;
+  height: 40px;
+  background: #17ec69;
+  border-radius: 10px;
+  width: 100px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+  transition: all 1s ease-in-out;
+}
+
+#login-form button:hover {
+  background: bisque;
+}
+p {
+  text-align: center;
+  margin-top: 20px;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
+  color: darkblue;
+}
