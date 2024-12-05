@@ -76,7 +76,7 @@ session_start();
             </form>
         </div>
         <div class="login-option">
-            <form method="POST" action="signup2.php">
+            <form method="POST" action="chooseoption.php">
                 <img src="https://icons.veryicon.com/png/o/miscellaneous/icon-icon-of-ai-intelligent-dispensing/login-user-name-1.png" alt="User Icon">
                 <h2>User Portal</h2>
                 <p>Access your personal workspace and features</p>
